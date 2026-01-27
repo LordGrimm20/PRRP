@@ -1,7 +1,7 @@
 Config = {}
 
 -- Discord Configuration
-Config.BotToken = 'MTQ2Mjk2Mjk5OTkxOTY0MDc1MQ.G8Yylm.loENPvVqv3CU7q-WGg-y32J0FqWGXS4MhxPgn8'
+Config.BotToken = ''
 Config.TicketChannelId = '1266116301961691146'
 Config.GuildId = '1262947187029971049' -- Your Discord Server ID (right-click server name → Copy ID)
 
