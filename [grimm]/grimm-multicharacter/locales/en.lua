@@ -1,0 +1,52 @@
+local Translations = {
+    notify = {
+        ['character_created'] = 'Character created successfully!',
+        ['character_deleted'] = 'Character deleted.',
+        ['character_loaded'] = 'Welcome back, %s!',
+        ['creation_failed'] = 'Failed to create character. Please try again.',
+        ['invalid_name'] = 'Invalid name. Please use only letters.',
+        ['name_too_short'] = 'Name must be at least %d characters.',
+        ['name_too_long'] = 'Name cannot exceed %d characters.',
+        ['invalid_dob'] = 'Invalid date of birth.',
+        ['too_young'] = 'Character must be at least %d years old.',
+        ['too_old'] = 'Character cannot be older than %d years.',
+        ['max_characters'] = 'You have reached your maximum character limit.',
+        ['select_nationality'] = 'Please select a nationality.',
+        ['select_gender'] = 'Please select a gender.',
+        ['delete_confirm'] = 'Are you sure you want to delete this character? This cannot be undone.',
+        ['spawning'] = 'Spawning...',
+    },
+    ui = {
+        ['title'] = 'PROJECT ROOTS',
+        ['subtitle'] = 'ROLEPLAY',
+        ['select_character'] = 'Select Character',
+        ['create_character'] = 'Create Character',
+        ['spawn_select'] = 'Select Spawn',
+        ['first_name'] = 'First Name',
+        ['last_name'] = 'Last Name',
+        ['date_of_birth'] = 'Date of Birth',
+        ['gender'] = 'Gender',
+        ['male'] = 'Male',
+        ['female'] = 'Female',
+        ['nationality'] = 'Nationality',
+        ['create'] = 'Create',
+        ['cancel'] = 'Cancel',
+        ['play'] = 'Play',
+        ['delete'] = 'Delete',
+        ['new_character'] = 'New Character',
+        ['empty_slot'] = 'Empty Slot',
+        ['slot'] = 'Slot',
+        ['cash'] = 'Cash',
+        ['bank'] = 'Bank',
+        ['job'] = 'Job',
+        ['last_played'] = 'Last Played',
+        ['customize'] = 'Customize Appearance',
+        ['patreon_slots'] = 'Patreon Bonus: +%d Slots',
+        ['staff_slots'] = 'Staff: Max Slots',
+    }
+}
+
+Lang = Locale:new({
+    phrases = Translations,
+    warnOnMissing = true
+})

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Roots - Appearance</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <aside class="side-panel">
+            <header class="panel-header">
+                <div class="logo-mini"><span>R</span></div>
+                <div class="header-text">
+                    <h1>CUSTOMIZE</h1>
+                    <span>PROJECT ROOTS</span>
+                </div>
+            </header>
+            <nav class="category-nav" id="categoryNav"></nav>
+            <footer class="panel-footer">
+                <button class="btn btn-secondary" onclick="cancelChanges()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-primary" onclick="saveChanges()">
+                    <i class="fas fa-check"></i> Save
+                </button>
+            </footer>
+        </aside>
+
+        <main class="main-content">
+            <div class="options-panel" id="optionsPanel">
+                <div class="options-header">
+                    <h2 id="optionsTitle">Select Category</h2>
+                    <div class="camera-controls">
+                        <button class="camera-btn" data-zone="face" onclick="setCamera('face')"><i class="fas fa-user"></i></button>
+                        <button class="camera-btn active" data-zone="body" onclick="setCamera('body')"><i class="fas fa-person"></i></button>
+                        <button class="camera-btn" data-zone="legs" onclick="setCamera('legs')"><i class="fas fa-socks"></i></button>
+                    </div>
+                </div>
+                <div class="options-content" id="optionsContent">
+                    <div class="placeholder-content">
+                        <i class="fas fa-hand-pointer"></i>
+                        <p>Select a category from the left to begin customizing</p>
+                    </div>
+                </div>
+            </div>
+            <div class="rotation-controls">
+                <button class="rotate-btn" onclick="rotateCharacter('left')"><i class="fas fa-chevron-left"></i></button>
+                <button class="rotate-btn" onclick="rotateCharacter('right')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </main>
+
+        <div class="modal hidden" id="outfitsModal">
+            <div class="modal-overlay" onclick="closeOutfitsModal()"></div>
+            <div class="modal-content outfits-modal">
+                <div class="modal-header">
+                    <h3>Saved Outfits</h3>
+                    <button class="close-btn" onclick="closeOutfitsModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="save-outfit-form">
+                        <input type="text" id="outfitName" placeholder="Enter outfit name...">
+                        <button class="btn btn-primary btn-sm" onclick="saveOutfit()"><i class="fas fa-plus"></i> Save</button>
+                    </div>
+                    <div class="outfits-list" id="outfitsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading-overlay hidden" id="loadingOverlay">
+            <div class="loading-spinner"><div class="spinner-ring"></div><div class="spinner-ring"></div></div>
+        </div>
+        <div class="notification-container" id="notifications"></div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

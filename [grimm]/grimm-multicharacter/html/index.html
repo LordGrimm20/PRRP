@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Roots - Character Selection</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <!-- Animated Background -->
+        <div class="background-container">
+            <div class="gradient-overlay"></div>
+            <div class="root-vines">
+                <svg class="vine vine-1" viewBox="0 0 200 800" preserveAspectRatio="none">
+                    <path class="vine-path" d="M100,0 Q120,200 80,400 Q40,600 100,800" />
+                </svg>
+                <svg class="vine vine-2" viewBox="0 0 200 800" preserveAspectRatio="none">
+                    <path class="vine-path" d="M50,0 Q80,150 30,350 Q0,550 60,800" />
+                </svg>
+                <svg class="vine vine-3" viewBox="0 0 200 800" preserveAspectRatio="none">
+                    <path class="vine-path" d="M150,0 Q180,250 120,450 Q80,650 140,800" />
+                </svg>
+            </div>
+            <div class="particle-container" id="particles"></div>
+            <div class="glow-orbs">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+                <div class="orb orb-3"></div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <span class="logo-letter">R</span>
+                    <div class="logo-roots"></div>
+                </div>
+                <div class="logo-text">
+                    <h1>PROJECT ROOTS</h1>
+                    <span class="subtitle">ROLEPLAY</span>
+                </div>
+            </div>
+            <div class="slot-info" id="slotInfo">
+                <span class="slot-count"><span id="usedSlots">0</span>/<span id="maxSlots">2</span></span>
+                <span class="slot-label">Characters</span>
+                <span class="patreon-badge hidden" id="patreonBadge"></span>
+            </div>
+        </header>
+
+        <!-- Character Selection Page -->
+        <main class="page character-selection active" id="characterSelection">
+            <div class="page-content">
+                <h2 class="page-title">
+                    <span class="title-decoration left"></span>
+                    Select Your Character
+                    <span class="title-decoration right"></span>
+                </h2>
+
+                <div class="character-grid" id="characterGrid">
+                    <!-- Characters will be dynamically inserted -->
+                </div>
+
+                <div class="character-preview" id="characterPreview">
+                    <div class="preview-frame">
+                        <div class="preview-info hidden" id="previewInfo">
+                            <h3 class="preview-name" id="previewName">John Doe</h3>
+                            <div class="preview-details">
+                                <div class="detail-row">
+                                    <i class="fas fa-birthday-cake"></i>
+                                    <span id="previewDob">01/01/1990</span>
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-globe"></i>
+                                    <span id="previewNationality">American</span>
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span id="previewJob">Unemployed</span>
+                                </div>
+                            </div>
+                            <div class="preview-money">
+                                <div class="money-item">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>$<span id="previewCash">0</span></span>
+                                </div>
+                                <div class="money-item">
+                                    <i class="fas fa-university"></i>
+                                    <span>$<span id="previewBank">0</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rotate-controls">
+                            <button class="rotate-btn" onclick="rotateCharacter('left')">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="rotate-btn" onclick="rotateCharacter('right')">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons" id="selectionActions">
+                    <button class="btn btn-secondary" id="deleteBtn" onclick="confirmDelete()">
+                        <i class="fas fa-trash"></i>
+                        <span>Delete</span>
+                    </button>
+                    <button class="btn btn-primary" id="playBtn" onclick="openSpawnSelection()">
+                        <i class="fas fa-play"></i>
+                        <span>Play</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Character Creation Page -->
+        <main class="page character-creation" id="characterCreation">
+            <div class="page-content">
+                <h2 class="page-title">
+                    <span class="title-decoration left"></span>
+                    Create Your Character
+                    <span class="title-decoration right"></span>
+                </h2>
+
+                <form class="creation-form" id="creationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter first name" maxlength="20" required>
+                            <div class="input-decoration"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter last name" maxlength="20" required>
+                            <div class="input-decoration"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" id="dob" name="dob" required>
+                            <div class="input-decoration"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality">Nationality</label>
+                            <select id="nationality" name="nationality" required>
+                                <option value="">Select nationality...</option>
+                            </select>
+                            <div class="input-decoration"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group gender-selection">
+                        <label>Gender</label>
+                        <div class="gender-options">
+                            <div class="gender-option" data-gender="male">
+                                <div class="gender-icon">
+                                    <i class="fas fa-mars"></i>
+                                </div>
+                                <span>Male</span>
+                            </div>
+                            <div class="gender-option" data-gender="female">
+                                <div class="gender-icon">
+                                    <i class="fas fa-venus"></i>
+                                </div>
+                                <span>Female</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-secondary" onclick="cancelCreation()">
+                            <i class="fas fa-times"></i>
+                            <span>Cancel</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i>
+                            <span>Create Character</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!-- Spawn Selection Page -->
+        <main class="page spawn-selection" id="spawnSelection">
+            <div class="page-content">
+                <h2 class="page-title">
+                    <span class="title-decoration left"></span>
+                    Select Spawn Location
+                    <span class="title-decoration right"></span>
+                </h2>
+
+                <div class="spawn-grid" id="spawnGrid">
+                    <!-- Spawn locations will be dynamically inserted -->
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="backToSelection()">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <button class="btn btn-primary" id="spawnBtn" onclick="spawnCharacter()">
+                        <i class="fas fa-location-dot"></i>
+                        <span>Spawn</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal hidden" id="deleteModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>Delete Character?</h3>
+                <p>Are you sure you want to delete <strong id="deleteCharName"></strong>? This action cannot be undone.</p>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                    <button class="btn btn-danger" onclick="deleteCharacter()">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay hidden" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="loading-spinner">
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-ring"></div>
+                </div>
+                <p class="loading-text" id="loadingText">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Notification Container -->
+        <div class="notification-container" id="notifications"></div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

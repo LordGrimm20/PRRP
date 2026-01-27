@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Roots - Cinematic Intro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --teal: #00d9c0;
+            --teal-dark: #007a6e;
+            --teal-glow: rgba(0, 217, 192, 0.6);
+            --fog: rgba(0, 40, 35, 0.3);
+            --text-primary: #e8e8e8;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* Dark fog/mist layers */
+        .fog-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .fog-1 {
+            background: 
+                radial-gradient(ellipse at 20% 80%, var(--fog) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, var(--fog) 0%, transparent 50%);
+            animation: fog-drift 20s ease-in-out infinite;
+        }
+
+        .fog-2 {
+            background: 
+                radial-gradient(ellipse at 60% 90%, var(--fog) 0%, transparent 40%),
+                radial-gradient(ellipse at 30% 10%, var(--fog) 0%, transparent 40%);
+            animation: fog-drift 25s ease-in-out infinite reverse;
+            opacity: 0.7;
+        }
+
+        @keyframes fog-drift {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(30px) translateY(-20px); }
+            50% { transform: translateX(-20px) translateY(30px); }
+            75% { transform: translateX(-30px) translateY(-10px); }
+        }
+
+        /* Floating particles - like dust or embers */
+        .dust-particles {
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .dust {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--teal);
+            border-radius: 50%;
+            opacity: 0;
+            animation: dust-float 15s ease-in-out infinite;
+            filter: blur(1px);
+        }
+
+        @keyframes dust-float {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(0) translateX(0);
+            }
+            10% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) translateX(50px);
+            }
+        }
+
+        /* Cinematic letterbox bars */
+        .letterbox {
+            position: fixed;
+            left: 0;
+            right: 0;
+            height: 10%;
+            background: #000;
+            z-index: 1000;
+        }
+
+        .letterbox.top {
+            top: 0;
+            transform: translateY(-100%);
+            animation: letterbox-in 1.5s ease-out 0.5s forwards;
+        }
+
+        .letterbox.bottom {
+            bottom: 0;
+            transform: translateY(100%);
+            animation: letterbox-in 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes letterbox-in {
+            to { transform: translateY(0); }
+        }
+
+        /* Main container */
+        .intro-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #000 0%, #001a15 50%, #000 100%);
+        }
+
+        /* Phase 1: Opening text - eerie fade */
+        .phase-text {
+            position: absolute;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.6em;
+            color: var(--text-primary);
+            opacity: 0;
+            text-transform: uppercase;
+        }
+
+        .phase-text.opening-text {
+            animation: eerie-fade 5s ease-in-out 2s forwards;
+        }
+
+        @keyframes eerie-fade {
+            0% { 
+                opacity: 0; 
+                filter: blur(10px);
+                letter-spacing: 1em;
+            }
+            20% { 
+                opacity: 0.8; 
+                filter: blur(0);
+                letter-spacing: 0.6em;
+            }
+            80% { 
+                opacity: 0.8; 
+                filter: blur(0);
+            }
+            100% { 
+                opacity: 0; 
+                filter: blur(5px);
+            }
+        }
+
+        /* Phase 2: PR Letters */
+        .monogram-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: monogram-phase-in 2s ease-out 7s forwards;
+        }
+
+        @keyframes monogram-phase-in {
+            0% { opacity: 0; filter: blur(20px); }
+            100% { opacity: 1; filter: blur(0); }
+        }
+
+        .monogram-svg {
+            width: 900px;
+            height: 500px;
+            filter: drop-shadow(0 0 30px rgba(0, 217, 192, 0.2));
+        }
+
+        /* The letters - ghostly appearance */
+        .letter-back {
+            fill: rgba(0, 60, 50, 0.2);
+            opacity: 0;
+            animation: letter-materialize 3s ease-out 7.5s forwards;
+        }
+
+        @keyframes letter-materialize {
+            0% { 
+                opacity: 0;
+                filter: blur(20px);
+            }
+            50% {
+                opacity: 0.5;
+                filter: blur(5px);
+            }
+            100% { 
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* Letter outlines - drawing effect */
+        .letter-outline {
+            fill: none;
+            stroke: var(--teal);
+            stroke-width: 1.5;
+            stroke-dasharray: 1500;
+            stroke-dashoffset: 1500;
+            filter: drop-shadow(0 0 8px var(--teal-glow));
+        }
+
+        .letter-p-outline {
+            animation: draw-letter 4s ease-out 8s forwards;
+        }
+
+        .letter-r-outline {
+            animation: draw-letter 4s ease-out 8.5s forwards;
+        }
+
+        @keyframes draw-letter {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Glowing particles around letters */
+        .glow-particle {
+            fill: var(--teal);
+            opacity: 0;
+            filter: drop-shadow(0 0 4px var(--teal-glow));
+        }
+
+        .glow-particle.p1 { animation: particle-flicker 3s ease-in-out 9s infinite; }
+        .glow-particle.p2 { animation: particle-flicker 3.5s ease-in-out 9.3s infinite; }
+        .glow-particle.p3 { animation: particle-flicker 2.8s ease-in-out 9.6s infinite; }
+        .glow-particle.p4 { animation: particle-flicker 3.2s ease-in-out 9.2s infinite; }
+        .glow-particle.p5 { animation: particle-flicker 2.9s ease-in-out 9.5s infinite; }
+        .glow-particle.p6 { animation: particle-flicker 3.3s ease-in-out 9.1s infinite; }
+
+        @keyframes particle-flicker {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            20% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.3;
+                transform: scale(1.2);
+            }
+            80% {
+                opacity: 0.9;
+            }
+        }
+
+        /* Glow pulse - breathing effect */
+        .monogram-svg.complete {
+            animation: eerie-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes eerie-glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(0, 217, 192, 0.2));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(0, 217, 192, 0.4)) 
+                        drop-shadow(0 0 80px rgba(0, 217, 192, 0.1));
+            }
+        }
+
+        /* Phase 3: Logo reveal - emerging from darkness */
+        .logo-reveal {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0;
+            z-index: 100;
+        }
+
+        .logo-reveal.active {
+            animation: emerge-from-dark 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes emerge-from-dark {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(30px);
+                filter: blur(30px) brightness(0.3);
+            }
+            40% {
+                opacity: 0.7;
+                filter: blur(10px) brightness(0.7);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0) brightness(1);
+            }
+        }
+
+        /* Logo container with ominous effects */
+        .logo-image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dark aura that breathes behind the logo */
+        .dark-aura {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 217, 192, 0.15) 0%, rgba(0, 50, 45, 0.3) 40%, transparent 70%);
+            opacity: 0;
+            filter: blur(30px);
+            animation: aura-appear 2s ease-out 12.5s forwards, aura-breathe 6s ease-in-out 14.5s infinite;
+        }
+
+        @keyframes aura-appear {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes aura-breathe {
+            0%, 100% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Shadow wisps that drift around */
+        .shadow-wisp {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(0, 217, 192, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        .wisp-1 {
+            top: -30px;
+            left: -60px;
+            animation: wisp-drift-1 8s ease-in-out 13s infinite;
+        }
+
+        .wisp-2 {
+            bottom: -40px;
+            right: -50px;
+            animation: wisp-drift-2 10s ease-in-out 13.5s infinite;
+        }
+
+        .wisp-3 {
+            top: 50%;
+            left: -80px;
+            transform: translateY(-50%);
+            animation: wisp-drift-3 12s ease-in-out 14s infinite;
+        }
+
+        @keyframes wisp-drift-1 {
+            0%, 100% {
+                opacity: 0;
+                transform: translate(0, 0) scale(1);
+            }
+            30% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.6;
+                transform: translate(20px, 30px) scale(1.2);
+            }
+            70% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes wisp-drift-2 {
+            0%, 100% {
+                opacity: 0;
+                transform: translate(0, 0) scale(1);
+            }
+            30% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.7;
+                transform: translate(-30px, -20px) scale(1.3);
+            }
+            70% {
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes wisp-drift-3 {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(-50%) scale(1);
+            }
+            30% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateY(-50%) translate(40px, 10px) scale(1.1);
+            }
+            70% {
+                opacity: 0.2;
+            }
+        }
+
+        /* Faint shadow pulse - like something watching */
+        .watching-shadow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+            opacity: 0;
+            animation: watching-pulse 5s ease-in-out 14s infinite;
+        }
+
+        @keyframes watching-pulse {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.05);
+            }
+        }
+
+        .logo-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(0, 217, 192, 0.3);
+            box-shadow: 
+                0 0 40px rgba(0, 0, 0, 0.8),
+                0 0 80px rgba(0, 217, 192, 0.15),
+                inset 0 0 60px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 10;
+            animation: logo-ominous-breathe 5s ease-in-out 14s infinite;
+        }
+
+        @keyframes logo-ominous-breathe {
+            0%, 100% {
+                transform: scale(1);
+                filter: brightness(0.9);
+                box-shadow: 
+                    0 0 40px rgba(0, 0, 0, 0.8),
+                    0 0 80px rgba(0, 217, 192, 0.15);
+            }
+            50% {
+                transform: scale(1.02);
+                filter: brightness(1);
+                box-shadow: 
+                    0 0 50px rgba(0, 0, 0, 0.9),
+                    0 0 100px rgba(0, 217, 192, 0.2);
+            }
+        }
+
+        /* Title text - mystic reveal */
+        .title-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .title-words {
+            display: flex;
+            gap: 0.4em;
+        }
+
+        .title-text {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: transparent;
+            background: linear-gradient(180deg, #fff 0%, var(--teal) 50%, var(--teal-dark) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(0, 217, 192, 0.3));
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .title-project.active {
+            animation: title-emerge 1.2s ease-out forwards;
+        }
+
+        .title-roots.active {
+            animation: title-emerge 1.2s ease-out forwards;
+        }
+
+        @keyframes title-emerge {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0) drop-shadow(0 0 20px rgba(0, 217, 192, 0.3));
+            }
+        }
+
+        .subtitle-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            opacity: 0;
+        }
+
+        .subtitle-text.active {
+            animation: subtitle-fade 1.5s ease-out forwards;
+        }
+
+        @keyframes subtitle-fade {
+            0% { opacity: 0; letter-spacing: 1em; }
+            100% { opacity: 0.5; letter-spacing: 0.5em; }
+        }
+
+        /* Screen flicker effect */
+        .flicker {
+            animation: screen-flicker 0.15s ease-out;
+        }
+
+        @keyframes screen-flicker {
+            0%, 100% { opacity: 1; }
+            25% { opacity: 0.8; }
+            50% { opacity: 1; }
+            75% { opacity: 0.85; }
+        }
+
+        /* Vignette - darker, moodier */
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.9) 100%);
+            pointer-events: none;
+            z-index: 500;
+        }
+
+        /* Audio controls */
+        .audio-controls {
+            position: fixed;
+            bottom: 12%;
+            right: 5%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 18px;
+            background: rgba(0, 20, 18, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 217, 192, 0.1);
+            border-radius: 50px;
+            z-index: 2000;
+            opacity: 0;
+            animation: controls-fade-in 2s ease-out 3s forwards;
+        }
+
+        @keyframes controls-fade-in {
+            to { opacity: 1; }
+        }
+
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--teal);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(0, 217, 192, 0.3);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 20px rgba(0, 217, 192, 0.4);
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .play-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--bg-primary);
+        }
+
+        .play-btn .pause-icon {
+            display: none;
+        }
+
+        .play-btn.playing .play-icon {
+            display: none;
+        }
+
+        .play-btn.playing .pause-icon {
+            display: block;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-icon {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-primary);
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .volume-container:hover .volume-icon {
+            opacity: 1;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--teal) 0%, var(--teal) 30%, rgba(100, 100, 100, 0.4) 30%, rgba(100, 100, 100, 0.4) 100%);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--teal);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 8px rgba(0, 217, 192, 0.5);
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 12px rgba(0, 217, 192, 0.7);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: var(--teal);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(0, 217, 192, 0.5);
+        }
+
+        .volume-slider::-moz-range-track {
+            background: rgba(100, 100, 100, 0.4);
+            border-radius: 2px;
+        }
+
+        .volume-slider::-moz-range-progress {
+            background: var(--teal);
+            border-radius: 2px;
+        }
+
+        /* Audio hint */
+        .audio-hint {
+            position: fixed;
+            top: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            z-index: 2000;
+            opacity: 0;
+            animation: hint-fade 6s ease-in-out 1s forwards;
+        }
+
+        @keyframes hint-fade {
+            0% { opacity: 0; }
+            20% { opacity: 0.5; }
+            80% { opacity: 0.5; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="intro-container" id="introContainer">
+        <!-- Fog layers -->
+        <div class="fog-layer fog-1"></div>
+        <div class="fog-layer fog-2"></div>
+
+        <!-- Dust particles -->
+        <div class="dust-particles" id="dustParticles"></div>
+
+        <!-- Letterbox bars -->
+        <div class="letterbox top"></div>
+        <div class="letterbox bottom"></div>
+
+        <!-- Phase 1: Opening text -->
+        <div class="phase-text opening-text">Deep roots. New beginnings.</div>
+
+        <!-- Phase 2: Clean PR Letters -->
+        <div class="monogram-container">
+            <svg class="monogram-svg" id="monogramSvg" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid meet">
+                
+                <!-- Letter P - left side -->
+                <path class="letter-back" d="M30,280 L100,280 Q160,280 160,340 Q160,400 100,400 L70,400 L70,480 L30,480 Z M70,315 L70,365 L90,365 Q115,365 115,340 Q115,315 90,315 Z" />
+                <path class="letter-outline letter-p-outline" d="M30,280 L100,280 Q160,280 160,340 Q160,400 100,400 L70,400 L70,480 L30,480 Z M70,315 L70,365 L90,365 Q115,365 115,340 Q115,315 90,315 Z" />
+                
+                <!-- Letter R - right side -->
+                <path class="letter-back" d="M740,280 L810,280 Q870,280 870,340 Q870,390 825,400 L885,480 L835,480 L785,410 L780,410 L780,480 L740,480 Z M780,315 L780,370 L800,370 Q825,370 825,342 Q825,315 800,315 Z" />
+                <path class="letter-outline letter-r-outline" d="M740,280 L810,280 Q870,280 870,340 Q870,390 825,400 L885,480 L835,480 L785,410 L780,410 L780,480 L740,480 Z M780,315 L780,370 L800,370 Q825,370 825,342 Q825,315 800,315 Z" />
+                
+                <!-- Glowing particles -->
+                <circle class="glow-particle p1" cx="50" cy="350" r="2" />
+                <circle class="glow-particle p2" cx="130" cy="450" r="2" />
+                <circle class="glow-particle p3" cx="100" cy="260" r="2" />
+                <circle class="glow-particle p4" cx="850" cy="320" r="2" />
+                <circle class="glow-particle p5" cx="780" cy="450" r="2" />
+                <circle class="glow-particle p6" cx="820" cy="260" r="2" />
+            </svg>
+        </div>
+
+        <!-- Phase 3: Logo reveal -->
+        <div class="logo-reveal" id="logoReveal">
+            <div class="logo-image-container">
+                <!-- Ominous shadow effects -->
+                <div class="watching-shadow"></div>
+                <div class="dark-aura"></div>
+                <div class="shadow-wisp wisp-1"></div>
+                <div class="shadow-wisp wisp-2"></div>
+                <div class="shadow-wisp wisp-3"></div>
+                <!-- The logo -->
+                <img class="logo-image" src="logo.png" alt="Project Roots">
+            </div>
+            <div class="title-container">
+                <div class="title-words">
+                    <span class="title-text title-project" id="titleProject">Project</span>
+                    <span class="title-text title-roots" id="titleRoots">Roots</span>
+                </div>
+                <p class="subtitle-text" id="subtitleText">Roleplay</p>
+            </div>
+        </div>
+
+        <!-- Vignette -->
+        <div class="vignette"></div>
+    </div>
+
+    <!-- Audio hint -->
+    <div class="audio-hint">Click anywhere for audio</div>
+
+    <!-- Audio controls -->
+    <div class="audio-controls" id="audioControls">
+        <button class="play-btn" id="playBtn" aria-label="Play/Pause">
+            <svg class="play-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+            <svg class="pause-icon" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+        </button>
+        <div class="volume-container">
+            <svg class="volume-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="30">
+        </div>
+    </div>
+
+    <!-- Background music -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const introContainer = document.getElementById('introContainer');
+        const logoReveal = document.getElementById('logoReveal');
+        const titleProject = document.getElementById('titleProject');
+        const titleRoots = document.getElementById('titleRoots');
+        const subtitleText = document.getElementById('subtitleText');
+        const dustParticles = document.getElementById('dustParticles');
+        const audio = document.getElementById('bgMusic');
+        const playBtn = document.getElementById('playBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        // Generate dust particles
+        for (let i = 0; i < 40; i++) {
+            const dust = document.createElement('div');
+            dust.className = 'dust';
+            dust.style.left = Math.random() * 100 + '%';
+            dust.style.top = (60 + Math.random() * 40) + '%';
+            dust.style.animationDelay = (Math.random() * 15) + 's';
+            dust.style.animationDuration = (10 + Math.random() * 10) + 's';
+            dustParticles.appendChild(dust);
+        }
+
+        // Timeline events - slower, more atmospheric
+        const timeline = [
+            // 11s: Add glow pulse to monogram
+            { time: 11000, action: () => {
+                document.getElementById('monogramSvg').classList.add('complete');
+            }},
+            
+            // 12s: Logo begins emerging
+            { time: 12000, action: () => {
+                logoReveal.classList.add('active');
+            }},
+            
+            // 14.5s: "Project" fades in
+            { time: 14500, action: () => {
+                titleProject.classList.add('active');
+                introContainer.classList.add('flicker');
+                setTimeout(() => introContainer.classList.remove('flicker'), 200);
+            }},
+            
+            // 15.5s: "Roots" fades in
+            { time: 15500, action: () => {
+                titleRoots.classList.add('active');
+                introContainer.classList.add('flicker');
+                setTimeout(() => introContainer.classList.remove('flicker'), 200);
+            }},
+            
+            // 17s: Subtitle fade
+            { time: 17000, action: () => {
+                subtitleText.classList.add('active');
+            }},
+        ];
+
+        // Execute timeline
+        timeline.forEach(event => {
+            setTimeout(event.action, event.time);
+        });
+
+        // ======================
+        // AUDIO CONTROLS
+        // ======================
+
+        // Set initial volume
+        audio.volume = volumeSlider.value / 100;
+
+        // Function to update slider background gradient
+        function updateSliderBackground(slider) {
+            const value = slider.value;
+            const percentage = value + '%';
+            slider.style.background = `linear-gradient(to right, #00d9c0 0%, #00d9c0 ${percentage}, rgba(100, 100, 100, 0.4) ${percentage}, rgba(100, 100, 100, 0.4) 100%)`;
+        }
+
+        // Function to sync button state with audio
+        function syncPlayButton() {
+            if (audio.paused) {
+                playBtn.classList.remove('playing');
+            } else {
+                playBtn.classList.add('playing');
+            }
+        }
+
+        // Listen for audio play/pause events
+        audio.addEventListener('play', syncPlayButton);
+        audio.addEventListener('pause', syncPlayButton);
+
+        // Set initial slider background
+        updateSliderBackground(volumeSlider);
+
+        // Play/Pause toggle
+        playBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', function(e) {
+            audio.volume = e.target.value / 100;
+            updateSliderBackground(e.target);
+        });
+
+        // Prevent volume slider clicks from triggering autoplay
+        volumeSlider.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Prevent audio controls from triggering autoplay
+        document.getElementById('audioControls').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Auto-play on first interaction
+        let hasAutoPlayed = false;
+        
+        function tryAutoPlay(e) {
+            if (e.target.closest('#audioControls')) {
+                return;
+            }
+            
+            if (!hasAutoPlayed && audio.paused) {
+                hasAutoPlayed = true;
+                audio.play().catch(function() {
+                    hasAutoPlayed = false;
+                });
+            }
+            
+            if (hasAutoPlayed) {
+                document.removeEventListener('click', tryAutoPlay);
+            }
+        }
+        
+        document.addEventListener('click', tryAutoPlay);
+    </script>
+</body>
+</html>
