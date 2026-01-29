@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRIMM-HUD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="hud-container" class="hidden">
+        
+        <!-- Status Ring (Main circular HUD) -->
+        <div id="status-ring" class="hud-element">
+            <svg class="ring-svg" viewBox="0 0 200 200">
+                <!-- Background rings -->
+                <circle class="ring-bg" cx="100" cy="100" r="90" />
+                
+                <!-- Status arcs (will be generated dynamically) -->
+                <g id="status-arcs"></g>
+            </svg>
+            
+            <!-- Center content -->
+            <div class="ring-center">
+                <!-- Voice indicator -->
+                <div id="voice-indicator" class="voice-indicator">
+                    <i class="fas fa-microphone"></i>
+                    <div class="voice-bars">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                
+                <!-- Media player (when active) -->
+                <div id="media-player" class="media-player hidden">
+                    <div class="media-thumbnail">
+                        <img id="media-thumb" src="" alt="">
+                        <i class="fas fa-music media-icon"></i>
+                    </div>
+                    <div class="media-info">
+                        <div class="media-title marquee">
+                            <span id="media-title-text">No media playing</span>
+                        </div>
+                        <div class="media-artist" id="media-artist">-</div>
+                    </div>
+                    <div class="media-controls">
+                        <button class="media-btn" data-action="previous"><i class="fas fa-backward-step"></i></button>
+                        <button class="media-btn play-btn" data-action="play"><i class="fas fa-play"></i></button>
+                        <button class="media-btn" data-action="skip"><i class="fas fa-forward-step"></i></button>
+                    </div>
+                    <div class="media-progress">
+                        <div class="media-progress-bar" id="media-progress"></div>
+                    </div>
+                </div>
+                
+                <!-- Status icons (when no media) -->
+                <div id="status-icons" class="status-icons">
+                    <div class="status-icon" data-status="health">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Player ID badge -->
+            <div id="player-id" class="player-id">
+                <span class="id-label">ID:</span>
+                <span class="id-value">0</span>
+            </div>
+        </div>
+        
+        <!-- Info Panel (Time, Location, Weather) -->
+        <div id="info-panel" class="hud-element">
+            <div class="info-time">
+                <span id="time-display">12:00</span>
+                <i id="weather-icon" class="fas fa-sun"></i>
+            </div>
+            <div class="info-location">
+                <div class="location-zone" id="location-zone">Los Santos</div>
+                <div class="location-street" id="location-street">Main Street</div>
+            </div>
+        </div>
+        
+        <!-- Compass -->
+        <div id="compass" class="hud-element">
+            <div class="compass-ring">
+                <div class="compass-arrow">
+                    <i class="fas fa-location-arrow"></i>
+                </div>
+                <span class="compass-cardinal" id="compass-cardinal">N</span>
+            </div>
+            <div class="compass-degrees" id="compass-degrees">0°</div>
+        </div>
+        
+        <!-- Vehicle HUD -->
+        <div id="vehicle-hud" class="hud-element hidden">
+            <div class="vehicle-speedometer">
+                <div class="speed-value" id="speed-value">0</div>
+                <div class="speed-unit" id="speed-unit">KM/H</div>
+            </div>
+            
+            <div class="vehicle-gauges">
+                <!-- RPM Bar -->
+                <div class="gauge-container">
+                    <div class="gauge-label">RPM</div>
+                    <div class="gauge-bar">
+                        <div class="gauge-fill rpm-fill" id="rpm-bar"></div>
+                    </div>
+                </div>
+                
+                <!-- Fuel Bar -->
+                <div class="gauge-container">
+                    <div class="gauge-label"><i class="fas fa-gas-pump"></i></div>
+                    <div class="gauge-bar">
+                        <div class="gauge-fill fuel-fill" id="fuel-bar"></div>
+                    </div>
+                    <div class="gauge-value" id="fuel-value">100%</div>
+                </div>
+            </div>
+            
+            <div class="vehicle-indicators">
+                <div class="indicator" id="gear-indicator">N</div>
+                <div class="indicator seatbelt-indicator hidden" id="seatbelt-indicator">
+                    <i class="fas fa-car-crash"></i>
+                </div>
+                <div class="indicator lights-indicator hidden" id="lights-indicator">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="indicator engine-indicator hidden" id="engine-indicator">
+                    <i class="fas fa-engine-warning"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Effects (buffs/debuffs) -->
+        <div id="status-effects" class="status-effects"></div>
+        
+        <!-- Cinematic Mode Bars -->
+        <div id="cinematic-bars" class="cinematic-bars hidden">
+            <div class="bar top-bar"></div>
+            <div class="bar bottom-bar"></div>
+        </div>
+        
+        <!-- Damage Flash Effect -->
+        <div id="damage-flash" class="damage-flash"></div>
+        
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>
